@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<body>
+<button id="cheatb" onclick="cheat()">Cheat Button</button>
+<p id="rankp">Rank: Apprentice</p>
+<p id="moneyp">Money: 0</p>
+<button id="pickup" onclick="pickupg()">Upgrade Pickaxe</button>
+<br/>
+<br/>
+<button id="critup" onclick="critupg()">Upgrade Critical Chance</button>
+<h2 id="minetime">Ready</h2>
+<img id="miners" src="http://vignette2.wikia.nocookie.net/clubpenguin/images/f/fb/Puffle_Care_Icons_Head_Dighelmet.png/revision/latest?cb=20130919183448" />
+<img src="https://openclipart.org/image/2400px/svg_to_png/217569/simple_pickaxe.png&disposition=attachment" id="pickaxe" />
+<img src="http://www.stickpng.com/assets/thumbs/580b585b2edbce24c47b26f5.png" id="rock"/>
+<style>
+    #pickaxe {
+        z-index: 100;
+        transform: rotate(270deg);
+        width: 100px;
+        height: 100px;
+        position: absolute;
+    }
+    
+    #rock {
+        z-index: 5;
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        left: 33%;
+        top: 20%;
+    }
+    
+    #moneyp {
+        color: darkgreen;
+    }
+    
+    #miners {
+        z-index: 1;
+        position: absolute;
+        left: 85%;
+        top: 5%;
+        width: 150px;
+        height: 100px;
+    }
+    
+    #minetime {
+        z-index: 1;
+        position: absolute;
+        left: 88%;
+        top: 17%;
+    }
+#rankp {
+color: crimson;
+}
+#cheatb {
+width: 150px;
+height: 50px;
+color: pink;
+background-color: yellow;
+}
+#pickup {
+width: 150px;
+height: 50px;
+color: purple;
+background-color: blue;
+}
+#critup {
+color: blue;
+background-color: yellow;
+width: 150px;
+height: 50px;
+}
+</style>
+    
+</body>
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+    
+function Random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+    
+var mouseX = 0;
+var mouseY = 0;
+var money = 0;
+var minetime = 0;
+var mining = 0;
+var mineready = 1;
+var gift = 0;
+var giftRandom = Random(1, 10);
+var n = 0;
+var rockfn = 0;
+var randpos = Random(2, 95);
+var randtype = Random(1, 5);
+var hidden = 0;
+var experience = Random(0, 5);
+var expan = '';
+var friendsrep = 100;
+var bossrep = 100;
+var expanout = Random(1, 2);
+var picklevel = 1;
+var pickprice = 50;
+var chance = Random(1, 100);
+var critnumb = 0;
+var critchance = 2;
+var critprice = 50;
+    
+setInterval(function() {
+    $(document).on('mousemove', function(event) {
+        mouseX = event.pageX;
+        mouseY = event.pageY;
+    });
+}, 15);
+    
+setInterval(function() {
+        $('#pickaxe').css('left', mouseX.toString() - 50 + 'px');
+        $('#pickaxe').css('top', mouseY.toString() - 60 + 'px');
+}, 25);
+
+$(document).click(function() {
+if (hidden == 0) {
+    $('#pickaxe').css('transform', 'rotate(230deg)');
+    setTimeout(function() {
+        $('#pickaxe').css('transform', 'rotate(270deg)');
+    }, 100);
+}
+});
+    
+$(document).click(function() {
+if (hidden == 0) {
+chance = Random(1, 25);
+    $('#rock').css('width', '400px');
+    $('#rock').css('height', '400px');
+    $('#rock').css('left', '36%');
+    $('#rock').css('top', '25%');
+    setTimeout(function() {
+        $('#rock').css('width', '500px');
+        $('#rock').css('height', '500px');
+        $('#rock').css('left', '33%');
+        $('#rock').css('top', '20%');
+rockfall();
+if (chance < critchance) {
+critnumb++;
+money = money + (picklevel * 10);
+$('body').append('<p id="criticalparagraph' + critnumb.toString()+'">Critical!</p>');
+$('#criticalparagraph' + critnumb.toString()).css('position', 'absolute');
+$('#criticalparagraph' + critnumb.toString()).css('left', mouseX + 'px');
+$('#criticalparagraph' + critnumb.toString()).css('top', mouseY + 'px');
+$('#criticalparagraph' + critnumb.toString()).css('color', 'red');
+$('#criticalparagraph' + critnumb.toString()).css('z-index', '1000');
+setTimeout(function() {
+$('#criticalparagraph' + critnumb.toString()).fadeOut('slowest');
+}, 100);
+        money = money + picklevel;
+} else {
+money = money + picklevel;
+}
+    }, 100);
+}
+});
+
+setInterval(function() {
+    $('#moneyp').html('Money: ' + money);
+}, 15);
+
+setInterval(function() {
+    if (minetime > 0) {
+        $('#minetime').html(minetime);
+        mineready = 0;
+    } else {
+        $('#minetime').html('Ready');
+        mineready = 1;
+    }
+}, 15);
+    
+$(document).keydown(function (e) {
+key = e.keyCode;
+switch (key) {
+    case 77:
+        if (mineready === 1) {
+            minetime = 29;
+            minus1n();
+        } else {
+            alert('Mining In Progress');
+        }
+        break;
+
+    case 71:
+if (gift === 1) {
+giftRandom = Random(1, 35);
+        if (giftRandom === 1 || giftRandom === 2 || giftRandom === 3) {
+                alert('You Found Chert!');
+gift = 0;
+            } else if (giftRandom === 4) {
+                alert('You Found Limestone!');
+gift = 0;
+            } else if (giftRandom === 5) {
+                alert('You Found Sandstone!');
+gift = 0;
+            } else if (giftRandom === 6) {
+                alert('You Found Granite!');
+gift = 0;
+            } else if (giftRandom === 7) {
+                alert('You Found Gneiss!');
+gift = 0;
+            } else if (giftRandom === 8) {
+alert('You Found andesite!');
+gift = 0;
+} else if (giftRandom === 9) {
+alert('You Found Obsidian!');
+gift = 0;
+} else if (giftRandom === 10) {
+alert('You Found Basalt!');
+gift = 0;
+} else if (giftRandom === 11) {
+alert('You Found Gabbro!');
+} else if (giftRandom === 12) {
+alert('You Found Pegmatite!');
+} else if (giftRandom === 13) {
+alert('You Found Diorite!');
+} else if (giftRandom === 14) {
+alert('You Found Schist!');
+} else if (giftRandom === 15) {
+alert('You Found Quartz!');
+money = money + 10;
+} else if (giftRandom === 16) {
+alert('You Found Marble!');
+} else if (giftRandom === 17) {
+alert('You Found Quartzite!');
+} else if (giftRandom === 18) {
+alert('You Found Serpentinite!');
+} else if (giftRandom === 19) {
+alert('You Found Silver!');
+money = money + 15;
+} else if (giftRandom === 20) {
+alert('You Found Gold!');
+money = money + 25;
+} else if (giftRandom === 21) {
+alert('You Found Tin!');
+money = money + 3;
+} else if (giftRandom === 22) {
+alert('You Found Iron!');
+money = money + 8;
+} else if (giftRandom === 23) {
+alert('You Found Coal!');
+money = money + 2;
+} else if (giftRandom === 24) {
+alert('You Found Amphibolite!');
+} else if (giftRandom === 25) {
+alert('You Found Feldspar!');
+} else if (giftRandom === 26) {
+alert('You Found Tungsten!');
+} else if (giftRandom === 27) {
+alert('You Found Platinum!');
+money = money + 40;
+} else if (giftRandom === 28) {
+alert('You Found Mica!');
+} else if (giftRandom === 29) {
+alert('You Found Sillimanite!');
+} else if (giftRandom === 30) {
+alert('You Found Garnet!');
+} else if (giftRandom === 31) {
+alert('You Found Calcite!');
+} else if (giftRandom === 32) {
+alert('You Found Dolomite!');
+} else if (giftRandom === 33) {
+alert('You Found Serpentine!');
+} else if (giftRandom === 34) {
+alert('You Found Amphibole!');
+} else if (giftRandom === 35) {
+alert('You Found Pryoxene!');
+}
+}
+    break;
+case 72:
+if (hidden === 0) {
+$('#pickaxe').hide();
+hidden = 1;
+} else {
+$('#pickaxe').show();
+hidden = 0;
+}
+break;
+}
+});
+    
+function minus1n() {
+    setTimeout(function() {
+        if (n < 29) {
+            minetime--;
+            console.info('n');
+            n++;
+            mineready = 0;
+            minus1n();
+        } else {
+            mineready = 1;
+            gift = 1;
+n = 0;
+        }
+    }, 100);
+}
+
+function rockfall() {
+randpos = Random(2, 95);
+randtype = Random(1, 10);
+rockfn++;
+if (randtype === 1) {
+$('body').append('<img src="http://2.bp.blogspot.com/-787PkZgN5-k/UQ6OGGpT9VI/AAAAAAAAFeM/6D0lK2t2rrg/s320/greenstonemod.png" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 2) {
+$('body').append('<img src="https://cdn-enterprise.discourse.org/turtlerock/uploads/default/20395/c5388fca8e7e616e.png" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 3) {
+$('body').append('<img src="http://www.granite-surfaces.com/blog/wp-content/uploads/2015/02/granite-stone-floor.png" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 4) {
+$('body').append('<img src="http://www.ced.ltd.uk/img/Harlequin/Harlequin_Wet.png" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 5) {
+$('body').append('<img src="http://imagespng.com/Data/Logo/gold_PNG10996.png" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 6) {
+$('body').append('<img src="http://t11.deviantart.net/y5wFFoZX8MAvAntzjnUjSVHvXHg=/300x200/filters:fixed_height(100,100):origin()/pre08/c200/th/pre/i/2016/363/1/4/rock_crystal_on_a_transparent_background__by_prussiaart-dat9yoo.png" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 7) {
+$('body').append('<img src="https://www.newsday.co.zw/wp-content/uploads/2013/02/platinum-ore.gif" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 8) {
+$('body').append('<img src="http://piskel-imgstore-b.appspot.com/img/5af7da4f-4d3d-11e7-adf0-6de3a8eefaf9.gif" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 9) {
+$('body').append('<img src="http://ecobuiltsystems.com/wp-content/uploads/2015/11/metal-ore.png" id="rockn' + rockfn.toString() + '"/>');
+} else if (randtype === 10) {
+$('body').append('<img src="http://piskel-imgstore-b.appspot.com/img/f14c5094-4d3d-11e7-96c2-6de3a8eefaf9.gif" id="rockn' + rockfn.toString() + '"/>');
+}
+console.debug('obv');
+$('#rockn' + rockfn.toString()).css('position', 'absolute');
+$('#rockn' + rockfn.toString()).css('left', randpos + '%');
+$('#rockn' + rockfn.toString()).css('width', '50px');
+$('#rockn' + rockfn.toString()).css('height', '50px');
+$('#rockn' + rockfn.toString()).css('top', '0%');
+$('#rockn' + rockfn.toString()).animate({'top' : '844px'}, 2500);
+}
+
+setInterval(function() {
+if (money < 25) {
+$('#rankp').html('Rank: Apprentice');
+$('#rankp').css('color', 'chocolate');
+} else {
+if (money < 100) {
+$('#rankp').html('Rank: Lecturer');
+$('#rankp').css('color', 'black');
+} else {
+if (money < 200) {
+$('#rankp').html('Rank: Senior Lecturer');
+$('#rankp').css('color', 'lightblue');
+} else {
+if (money < 350) {
+$('#rankp').html('Rank: Reader');
+$('#rankp').css('color', 'lightgreen');
+} else {
+if (money < 450) {
+$('#rankp').html('Rank: Professor');
+$('#rankp').css('color', 'green');
+} else {
+if (money < 600) {
+$('#rankp').html('Rank: Head Of Department');
+$('#rankp').css('color', 'darkgreen');
+} else {
+if (money < 700) {
+$('#rankp').html('Rank: National Representative');
+$('#rankp').css('color', 'rgb(80, 50, 20)');
+} else {
+if (money < 850) {
+$('#rankp').html('Rank: International Representative');
+$('#rankp').css('color', 'silver');
+} else {
+if (money < 1000) {
+$('#rankp').html('Rank: Enlightened Teacher');
+$('#rankp').css('color', 'goldenrod');
+} else {
+if (money < 1250) {
+$('#rankp').html('Rank: Solar Hero');
+$('#rankp').css('color', 'purple');
+} else {
+if (money < 1500) {
+$('#rankp').html('Rank: Galactical Hero');
+$('#rankp').css('color', 'violet');
+} else {
+if (money < 2000) {
+$('#rankp').html('Rank: Geological Knight');
+$('#rankp').css('color', 'deeppink');
+} else {
+if (money < 2250) {
+$('#rankp').html('Rank: MultiUniversal Polymath');
+$('#rankp').css('color', 'gold');
+} else {
+if (money < 2500) {
+$('#rankp').html('Rank: Geological Lord');
+$('#rankp').css('color', 'mediumspringgreen');
+} else {
+if (money < 3000) {
+$('#rankp').html('Rank: High Lord Of Geology');
+$('#rankp').css('color', 'mediumvioletred');
+} else {
+if (money < 5000) {
+$('#rankp').html('Rank: Geological Emperor');
+$('#rankp').css('color', 'hotpink');
+} else {
+if (money < 7000) {
+$('#rankp').html('Rank: Geological Saint');
+$('#rankp').css('color', 'cornflowerblue');
+} else {
+if (money < 10000) {
+$('#rankp').html('Rank: Geological Saint');
+$('#rankp').css('color', 'royalblue');
+} else {
+if (money < 20000) {
+$('#rankp').html('Rank: Founder Of New Geology');
+$('#rankp').css('color', 'grenadine');
+} else {
+$('#rankp').html('Rank: Founder Of The New World');
+$('#rankp').css('color', 'cyan');
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}, 15);
+
+function cheat() {
+money = money + 25;
+}
+function pickupg() {
+if (money > pickprice - 1) {
+picklevel++;
+money = money - pickprice;
+pickprice = pickprice + 50;
+} else {
+alert('Insufficient Funds!');
+}
+}
+
+function critupg() {
+if (money > critprice - 1) {
+money = money - critprice;
+critchance++;
+critprice = critprice + 50;
+} else {
+alert('Insufficient Funds!');
+}
+}
+
+</script>
+    
+</html>
